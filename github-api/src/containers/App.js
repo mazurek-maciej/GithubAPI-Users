@@ -13,7 +13,7 @@ import '../resources/styles/styled-App.sass';
 const arr = [...Array(5).keys()];
 
 const GITHUB_SEARCH = `https://api.github.com/search/users?q=`;
-const PAGE = `&page=${this.state.pageNumber}`
+//const PAGE = `&page=${this.state.pageNumber}`
 const SEARCH_LIMIT = '&per_page=6';
 
 class App extends Component {
