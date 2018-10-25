@@ -1,9 +1,16 @@
+// Libaries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import '../resources/styles/styled-userProfile.sass'
+// Components
+import ProfileDetail from '../components/profile_detail';
+import ProfileRepos from '../components/profile_repos';
+
+// Styles
+import '../resources/styles/styled-userProfile.sass';
+import loading from '../resources/styles/loading.gif';
 
 const GITHUB_SEARCH = `https://api.github.com/users/`;
 
@@ -45,23 +52,18 @@ class UserProfile extends Component {
     render() {
         // console.log(this.state.userData)
         // console.log(this.state.repos)
+        let load;
         const { userData, repos, isLoading }  = this.state
         if (isLoading) {
-            return <div>Loading</div>
+            load = <img src={loading} alt='loading'/>
         }
         return (
             <div className='profileBody'>
                 <div className='profileContainer'>
+                {load}
                     <Link to='/'>⬅</Link>
-                    <div className='profileDetail'>
-                        <img src={userData.avatar_url} alt={userData.login} />
-                        <p>{userData.login}</p>
-                        <p>{userData.public_repos}</p>
-                        <p>Repositories:</p>
-                    </div>
-                    <div className='profileRepos'>
-                        {repos.map(repo => <li key={repo.id}>{repo.name}</li>)}
-                    </div>
+                    <ProfileDetail user={userData} />
+                    <ProfileRepos repos={repos} />
                 </div>
             </div>
         )

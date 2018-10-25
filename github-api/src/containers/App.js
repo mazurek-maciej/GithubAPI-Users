@@ -1,21 +1,23 @@
+// Libaries
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+
+// Actions
 import { fetchUsers, loadingState, plusPage, minusPage } from '../actions';
 
-
 // Components
-import GithubUsers from './github_users';
+import GithubUsers from './githubUsers';
+import Search from '../components/search';
 
 // Styles
 import '../resources/styles/styled-App.sass';
 
-//const arr = [...Array(5).keys()];
-
+// Constants
 const GITHUB_SEARCH = `https://api.github.com/search/users?q=`;
-//const PAGE = `&page=${this.props.page.pageNr}`
-const SEARCH_LIMIT = '&per_page=8';
+const SEARCH_LIMIT = '&per_page=6';
 
+// Main App
 class App extends Component {
   constructor(props) {
     super(props);
@@ -29,18 +31,20 @@ class App extends Component {
   }
 
   handleSubmit = e => {
-    this.props.loadingState(true)
     const pageNr = `&page=${this.props.page.pageNr}`
+    if (this.inputVal === '') {
+      this.props.loadingState(true) 
+    }
     axios
     .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
     .then(response => this.props.fetchUsers(response.data.items))
     .then(this.props.loadingState(false))
     .catch(error => this.setState({
       error,
-    }))
+    }));
     e.preventDefault();
   }
-
+  
   handleChange = () => {
     this.setState({ local: this.inputVal.current.value })
   }
@@ -56,25 +60,30 @@ class App extends Component {
   }
   
   render() {
-    // console.log(this.state.isLoading)
-    // console.log(this.state.pageNumber)
-    console.log(this.props.page.pageNr)
+    let plus, minus, pageCount;
+
+    if (this.props.usr.users.length > 0) {
+
+      plus = <button onClick={this.props.plusPage}>Next</button>;
+      pageCount = <p>{this.props.page.pageNr}</p>
+      
+      if (this.props.page.pageNr > 0) { 
+        minus = <button onClick={this.props.minusPage}>Prev</button>;
+      }
+    }
+    
     return (
       <div className='mainBody'>
+      <h1>Search for people on Github!</h1>
         <div className='formContainer'>
-          <form className='searchForm' onSubmit={this.handleSubmit} >
-                  <input 
-                  type='text' 
-                  placeholder='Type username'
-                  ref={this.inputVal} 
-                  onChange={this.handleChange} />
-                  <button type='submit'>Search</button>
-                  <div className='pagesNavigation'>
-                    <button onClick={this.handleMinus}>Prev</button>
-                    <button onClick={this.handlePlus}>Next</button>
-                  </div>
-          </form>
-          {/* <button onClick={() => this.props.fetchUsers(this.state.local)}>fetch_users</button> */}
+          <Search 
+            handleSubmit={this.handleSubmit} 
+            handleChange={this.handleChange} 
+            inputVal={this.inputVal} 
+            plus={plus} 
+            minus={minus} 
+            pageCount={pageCount} 
+          />
         </div>
           <div className='gitContainer'>
             <GithubUsers loading={this.state.isLoading} page={this.props.page}/>
@@ -85,7 +94,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  return { page: state.pageNumber}
+  return { 
+    page: state.pageNumber,
+    usr: state.addUser
+  }
 }
 
 export default connect(mapStateToProps, { fetchUsers, loadingState, plusPage, minusPage })(App);
