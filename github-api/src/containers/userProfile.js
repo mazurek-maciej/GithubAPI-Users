@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import '../resources/styles/styled-userProfile.sass'
 
 const GITHUB_SEARCH = `https://api.github.com/users/`;
 
@@ -40,18 +43,26 @@ class UserProfile extends Component {
     }
     
     render() {
+        // console.log(this.state.userData)
+        // console.log(this.state.repos)
         const { userData, repos, isLoading }  = this.state
-        console.log(this.state.userData)
-        console.log(this.state.repos)
         if (isLoading) {
             return <div>Loading</div>
         }
         return (
-            <div>
-                <img src={userData.avatar_url} alt={userData.login} />
-                <p>{userData.login}</p>
-                <p>{userData.public_repos}</p>
-                {repos.map(repo => <li key={repo.id}>{repo.id}</li>)}
+            <div className='profileBody'>
+                <div className='profileContainer'>
+                    <Link to='/'>⬅</Link>
+                    <div className='profileDetail'>
+                        <img src={userData.avatar_url} alt={userData.login} />
+                        <p>{userData.login}</p>
+                        <p>{userData.public_repos}</p>
+                        <p>Repositories:</p>
+                    </div>
+                    <div className='profileRepos'>
+                        {repos.map(repo => <li key={repo.id}>{repo.name}</li>)}
+                    </div>
+                </div>
             </div>
         )
     }

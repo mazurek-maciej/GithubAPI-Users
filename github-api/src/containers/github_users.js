@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // Styles
-import '../resources/styles/github-Users.sass';
+import '../resources/styles/styled-github_Users.sass';
 
 
 class GithubUsers extends Component {
-
     render() {
         if (this.props.loading.isLoading) {
             return <div>Loading</div>
@@ -21,7 +20,6 @@ class GithubUsers extends Component {
                             src={user.avatar_url} 
                             alt={user.login} />
                             <p>{user.login}</p>
-                            <p>{user.id}</p>
                             <Link to={{pathname: `/user/${user.login}`, props: user.login }}>View</Link>
                         </li>
                     )}
@@ -35,7 +33,8 @@ class GithubUsers extends Component {
 const mapStateToProps = state => {
     return { 
         user: state.addUser,
-        loading: state.loadingState
+        loading: state.loadingState,
+        page: state.pageNumber
      }
 }
 
