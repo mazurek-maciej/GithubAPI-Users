@@ -23,11 +23,11 @@ class App extends Component {
     super(props);
     this.state = {
       local: [],
-      isLoading: false
+      isLoading: false,
+      error: null
     }
+    
     this.inputVal = React.createRef();
-    this.btnPlus = React.createRef();
-    this.btnMinus = React.createRef();
   }
 
   handleSubmit = e => {
@@ -40,7 +40,7 @@ class App extends Component {
     .then(response => this.props.fetchUsers(response.data.items))
     .then(this.props.loadingState(false))
     .catch(error => this.setState({
-      error,
+      error
     }));
     e.preventDefault();
   }
@@ -48,22 +48,11 @@ class App extends Component {
   handleChange = () => {
     this.setState({ local: this.inputVal.current.value })
   }
-
-  handlePlus = () => {
-    this.props.plusPage()
-  }
-
-  handleMinus = () => {
-    if (this.props.page.pageNr > 1) {
-      this.props.minusPage()
-    }
-  }
   
   render() {
     let plus, minus, pageCount;
 
     if (this.props.usr.users.length > 0) {
-
       plus = <button onClick={this.props.plusPage}>Next</button>;
       pageCount = <p>{this.props.page.pageNr}</p>
       
@@ -71,20 +60,20 @@ class App extends Component {
         minus = <button onClick={this.props.minusPage}>Prev</button>;
       }
     }
-    
+
     return (
       <div className='mainBody'>
-      <h1>Search for people on Github!</h1>
-        <div className='formContainer'>
-          <Search 
-            handleSubmit={this.handleSubmit} 
-            handleChange={this.handleChange} 
-            inputVal={this.inputVal} 
-            plus={plus} 
-            minus={minus} 
-            pageCount={pageCount} 
-          />
-        </div>
+        <h1>Search for people on Github!</h1>
+          <div className='formContainer'>
+            <Search 
+              handleSubmit={this.handleSubmit} 
+              handleChange={this.handleChange} 
+              inputVal={this.inputVal} 
+              plus={plus} 
+              minus={minus} 
+              pageCount={pageCount} 
+            />
+          </div>
           <div className='gitContainer'>
             <GithubUsers loading={this.state.isLoading} page={this.props.page}/>
           </div>
