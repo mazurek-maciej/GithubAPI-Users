@@ -50,8 +50,7 @@ class UserProfile extends Component {
     }
     
     render() {
-        // console.log(this.state.userData)
-        // console.log(this.state.repos)
+        
         let load;
         const { userData, repos, isLoading }  = this.state
         if (isLoading) {

@@ -12,6 +12,7 @@ import Search from '../components/search';
 
 // Styles
 import '../resources/styles/styled-App.sass';
+import loadingGif from '../resources/styles/loading.gif'
 
 // Constants
 const GITHUB_SEARCH = `https://api.github.com/search/users?q=`;
@@ -31,9 +32,11 @@ class App extends Component {
   }
 
   handleSubmit = e => {
+    this.props.loadingState(true)  
     const pageNr = `&page=${this.props.page.pageNr}`
-    if (this.inputVal === '') {
-      this.props.loadingState(true) 
+    
+    if (this.inputVal.current.value === '') {
+      return alert('Enter login before start searching')
     }
     axios
     .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
@@ -50,7 +53,7 @@ class App extends Component {
   }
   
   render() {
-    let plus, minus, pageCount;
+    let plus, minus, pageCount, loads;
 
     if (this.props.usr.users.length > 0) {
       plus = <button onClick={this.props.plusPage}>Next</button>;
@@ -60,6 +63,11 @@ class App extends Component {
         minus = <button onClick={this.props.minusPage}>Prev</button>;
       }
     }
+
+    if (this.props.loadIndicator.isLoading) {
+      loads = <div>{loadingGif}</div>
+    }
+    
 
     return (
       <div className='mainBody'>
@@ -73,6 +81,7 @@ class App extends Component {
               minus={minus} 
               pageCount={pageCount} 
             />
+            {loads}
           </div>
           <div className='gitContainer'>
             <GithubUsers loading={this.state.isLoading} page={this.props.page}/>
@@ -85,7 +94,8 @@ class App extends Component {
 const mapStateToProps = state => {
   return { 
     page: state.pageNumber,
-    usr: state.addUser
+    usr: state.addUser,
+    loadIndicator: state.loadingState
   }
 }
 
