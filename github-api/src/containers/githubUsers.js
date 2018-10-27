@@ -25,7 +25,7 @@ class GithubUsers extends Component {
 
 const mapStateToProps = state => {
     return { 
-        user: state.addUser,
+        user: state.fetchUsers,
         loading: state.loadingState,
         page: state.pageNumber
      }

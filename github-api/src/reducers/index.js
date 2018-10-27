@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import AddUser from './reducer_add-user';
+import FetchUsers from './reducer_fetch-users';
 import LoadingState from './reducer_loading';
 import PageNumber from './reducer_page-number';
 
 const rootReducer = combineReducers ({
-    addUser: AddUser,
+    fetchUsers: FetchUsers,
     loadingState: LoadingState,
     pageNumber: PageNumber
 });

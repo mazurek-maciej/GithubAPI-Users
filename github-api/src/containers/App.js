@@ -4,7 +4,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 // Actions
-import { fetchUsers, loadingState, plusPage, minusPage } from '../actions';
+import { fetchActionUsers, loadingState, plusPage, minusPage } from '../actions';
 
 // Components
 import GithubUsers from './githubUsers';
@@ -27,24 +27,15 @@ class App extends Component {
       isLoading: false,
       error: null
     }
-    
     this.inputVal = React.createRef();
   }
 
   handleSubmit = e => {
     this.props.loadingState(true)  
-    const pageNr = `&page=${this.props.page.pageNr}`
-    
     if (this.inputVal.current.value === '') {
       return alert('Enter login before start searching')
     }
-    axios
-      .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
-      .then(response => this.props.fetchUsers(response.data.items))
-      .then(this.props.loadingState(false))
-      .catch(error => this.setState({
-        error
-      }));
+    this.getUsers();
     e.preventDefault();
   }
   
@@ -53,22 +44,6 @@ class App extends Component {
   }
   
   render() {
-    let plus, minus, pageCount, loads;
-
-    if (this.props.usr.users.length > 0) {
-      plus = <button onClick={this.props.plusPage}>Next</button>;
-      pageCount = <p>{this.props.page.pageNr}</p>
-      
-      if (this.props.page.pageNr > 0) { 
-        minus = <button onClick={this.props.minusPage}>Prev</button>;
-      }
-    }
-
-    if (this.props.loadIndicator.isLoading) {
-      loads = <div>{loadingGif}</div>
-    }
-    
-
     return (
       <div className='mainBody'>
         <h1>Search for people on Github!</h1>
@@ -77,26 +52,38 @@ class App extends Component {
               handleSubmit={this.handleSubmit} 
               handleChange={this.handleChange} 
               inputVal={this.inputVal} 
-              plus={plus} 
-              minus={minus} 
-              pageCount={pageCount} 
+              users={this.props.users.users}
+              actionPlus={this.props.plusPage} 
+              actionMinus={this.props.minusPage} 
+              page={this.props.page}
             />
-            {loads}
           </div>
           <div className='gitContainer'>
             <GithubUsers loading={this.state.isLoading} page={this.props.page}/>
           </div>
       </div>
     );
+  } 
+
+  getUsers() {
+    const pageNr = `&page=${this.props.page.pageNr}`
+    axios
+    .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
+    .then(response => this.props.fetchActionUsers(response.data.items))
+    .then(this.props.loadingState(false))
+    .catch(error => this.setState({
+      error
+    }));
   }
 }
+
 
 const mapStateToProps = state => {
   return { 
     page: state.pageNumber,
-    usr: state.addUser,
+    users: state.fetchUsers,
     loadIndicator: state.loadingState
   }
 }
 
-export default connect(mapStateToProps, { fetchUsers, loadingState, plusPage, minusPage })(App);
+export default connect(mapStateToProps, { fetchActionUsers, loadingState, plusPage, minusPage })(App);

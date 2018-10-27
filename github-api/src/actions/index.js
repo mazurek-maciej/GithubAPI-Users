@@ -4,7 +4,7 @@ export const LOADING = 'loading';
 export const PAGE_MINUS = 'page_minus';
 export const PAGE_PLUS = 'page_plus';
 
-export function fetchUsers(axiosUsers) {
+export function fetchActionUsers(axiosUsers) {
 
     return {
         type: FETCH_USERS,
