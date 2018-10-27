@@ -25,26 +25,9 @@ class UserProfile extends Component {
     }
 
     componentDidMount() {
-        this.setState( { isLoading: true })
-        axios
-        .get(`${GITHUB_SEARCH}${this.props.match.params.login}`)
-        .then(response => this.setState({
-            userData: response.data,
-            isLoading: false
-        }))
-        .catch(error => this.setState({
-            error,
-          }))   
-
-          axios
-            .get(`${GITHUB_SEARCH}${this.props.match.params.login}/repos`)
-            .then(response => this.setState({
-                repos: response.data,
-                isLoading: false
-            }))
-            .catch(error => this.setState({
-                error,
-            })) 
+        this.setState( { isLoading: true });
+        this.getUserData();
+        this.getRepos();
     }
     
     render() {
@@ -64,6 +47,31 @@ class UserProfile extends Component {
                 </div>
             </div>
         )
+    }
+
+    // Functions 
+    getUserData() {
+        axios
+        .get(`${GITHUB_SEARCH}${this.props.match.params.login}`)
+        .then(response => this.setState({
+            userData: response.data,
+            isLoading: false
+        }))
+        .catch(error => this.setState({
+            error,
+          })) 
+    }
+
+    getRepos() {
+        axios
+        .get(`${GITHUB_SEARCH}${this.props.match.params.login}/repos`)
+        .then(response => this.setState({
+            repos: response.data,
+            isLoading: false
+        }))
+        .catch(error => this.setState({
+            error,
+        }))
     }
 }
 
