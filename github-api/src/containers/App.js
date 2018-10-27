@@ -39,12 +39,12 @@ class App extends Component {
       return alert('Enter login before start searching')
     }
     axios
-    .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
-    .then(response => this.props.fetchUsers(response.data.items))
-    .then(this.props.loadingState(false))
-    .catch(error => this.setState({
-      error
-    }));
+      .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
+      .then(response => this.props.fetchUsers(response.data.items))
+      .then(this.props.loadingState(false))
+      .catch(error => this.setState({
+        error
+      }));
     e.preventDefault();
   }
   
