@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // Components
-import ProfileDetail from '../components/profile_detail';
-import ProfileRepos from '../components/profile_repos';
+import ProfileDetail from '../components/Profile/profile_detail';
+import ProfileRepos from '../components/Profile/profile_repos';
 
 // Styles
-import '../resources/styles/styled-userProfile.sass';
-import loading from '../resources/styles/loading.gif';
+import './styled-userProfile.sass';
+import loading from '../resources/images/loading.gif';
 
 const GITHUB_SEARCH = `https://api.github.com/users/`;
 
@@ -31,7 +31,6 @@ class UserProfile extends Component {
     }
     
     render() {
-        
         let load;
         const { userData, repos, isLoading }  = this.state
         if (isLoading) {

@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 
 // Components
-import FetchedUsers from '../components/fetched_users';
+import FetchedUsers from '../components/Main/Profiles/fetched_users';
 
 // Styles
-import '../resources/styles/styled-githubUsers.sass';
+import './styled-githubUsers.sass';
 
 
 class GithubUsers extends Component {
@@ -15,8 +15,10 @@ class GithubUsers extends Component {
             return <div>Loading</div>
         }
         return (
-            <div className='mainBox'>
-                <FetchedUsers users={this.props.user.users} />
+            <div className='gitContainer'>
+                <div className='mainBox'>
+                    <FetchedUsers users={this.props.user.users} />
+                </div>
             </div>
 
         )

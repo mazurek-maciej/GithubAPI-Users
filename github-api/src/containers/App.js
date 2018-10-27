@@ -8,11 +8,11 @@ import { fetchActionUsers, loadingState, plusPage, minusPage } from '../actions'
 
 // Components
 import GithubUsers from './githubUsers';
-import Search from '../components/search';
+import Search from '../components/Main/Search/search';
 
 // Styles
-import '../resources/styles/styled-App.sass';
-import loadingGif from '../resources/styles/loading.gif'
+import './styled-App.sass';
+
 
 // Constants
 const GITHUB_SEARCH = `https://api.github.com/search/users?q=`;
@@ -42,12 +42,11 @@ class App extends Component {
   handleChange = () => {
     this.setState({ local: this.inputVal.current.value })
   }
-  
   render() {
+    console.log(this.props.loadIndicator.isLoading)
     return (
       <div className='mainBody'>
         <h1>Search for people on Github!</h1>
-          <div className='formContainer'>
             <Search 
               handleSubmit={this.handleSubmit} 
               handleChange={this.handleChange} 
@@ -57,15 +56,13 @@ class App extends Component {
               actionMinus={this.props.minusPage} 
               page={this.props.page}
             />
-          </div>
-          <div className='gitContainer'>
             <GithubUsers loading={this.state.isLoading} page={this.props.page}/>
-          </div>
       </div>
     );
   } 
 
   getUsers() {
+    this.props.loadingState(true)
     const pageNr = `&page=${this.props.page.pageNr}`
     axios
     .get(`${GITHUB_SEARCH}${this.state.local}${pageNr}${SEARCH_LIMIT}`)
